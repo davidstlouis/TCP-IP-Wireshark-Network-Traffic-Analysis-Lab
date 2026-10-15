@@ -1,52 +1,68 @@
-# TCP/IP & Wireshark Network Traffic Analysis Lab
+# TCP/IP & Wireshark Network Analysis Lab
 
 ## Project Overview
 
-This project demonstrates basic network traffic analysis and troubleshooting using Wireshark and Windows networking utilities.
+This project demonstrates TCP/IP network traffic analysis and troubleshooting using Wireshark in a Windows client-server environment hosted in Microsoft Azure.
 
-The objective was to capture and analyze TCP/IP network packets, examine DNS resolution, identify the TCP three-way handshake, compare TCP and UDP traffic, and troubleshoot common network connectivity issues.
+The objective was to capture and analyze network communication between a Windows 10 Enterprise client and Windows Server 2022, examine DNS resolution, identify TCP three-way handshakes, analyze SMB file-sharing traffic, and troubleshoot network connectivity issues.
 
-This lab simulates real-world networking tasks performed by IT Support Specialists, Network Technicians, and System Administrators.
+This lab simulates real-world network troubleshooting tasks performed by IT Support Specialists, Network Technicians, and System Administrators.
 
 ## Technologies Used
 
+- Microsoft Azure
+- Windows Server 2022
+- Windows 10 Enterprise
 - Wireshark
-- TCP/IP Networking
-- Windows Command Prompt
-- Windows PowerShell
+- Active Directory Domain Services (AD DS)
 - DNS
+- TCP/IP
 - ICMP
-- TCP & UDP
+- SMB File Sharing
+- Windows Command Prompt & PowerShell
 
 ---
 
 ## Lab Environment
 
 ```text
-Windows Computer
+Microsoft Azure Virtual Network
 │
-├── Wireshark
-│   ├── Packet Capture
-│   ├── Protocol Filtering
-│   └── Traffic Analysis
+├── Windows Server 2022
+│   ├── Active Directory Domain Services
+│   ├── Domain: mydomain.con
+│   ├── DNS Server
+│   └── SMB File Sharing
 │
-├── Command Prompt / PowerShell
-│   ├── ping
-│   ├── nslookup
-│   ├── ipconfig
-│   ├── tracert
-│   └── Test-NetConnection
-│
-└── Network
-    ├── DNS Server
-    └── Web Server
+└── Windows 10 Enterprise
+    ├── Domain-Joined Client
+    ├── Wireshark
+    └── Network Troubleshooting Tools
 ```
 
-## Step 1: Capture Network Traffic
+Both virtual machines communicate over a private Azure virtual network.
 
-I installed Wireshark and selected my active network adapter to capture network traffic.
+## Step 1: Verify Network Configuration
 
-I examined packet information, including source and destination IP addresses, protocols, and packet details.
+I used Windows networking commands to identify the IP configurations of both virtual machines.
+
+```cmd
+ipconfig /all
+```
+
+I verified the client and server IP addresses, DNS configuration, and network connectivity.
+
+**Screenshot:**
+
+<!-- Insert Windows Server and Windows 10 IP configuration screenshots here -->
+
+---
+
+## Step 2: Capture Network Traffic Using Wireshark
+
+I installed Wireshark on the Windows 10 Enterprise client and selected the active network interface to capture traffic.
+
+I examined packet information, including source and destination IP addresses, protocols, and network communication between the client and server.
 
 **Screenshot:**
 
@@ -54,34 +70,34 @@ I examined packet information, including source and destination IP addresses, pr
 
 ---
 
-## Step 2: Analyze ICMP Traffic
+## Step 3: Analyze ICMP Traffic
 
-I generated ICMP traffic using the Windows `ping` command.
+I generated ICMP traffic from Windows 10 to Windows Server using the `ping` command.
 
 ```cmd
-ping 1.1.1.1
+ping <SERVER_PRIVATE_IP>
 ```
 
-I applied the following Wireshark display filter:
+Wireshark display filter:
 
 ```text
 icmp
 ```
 
-I examined ICMP Echo Request and Echo Reply packets to understand how devices test network reachability.
+I examined ICMP Echo Request and Echo Reply packets to verify connectivity between both virtual machines.
 
 **Screenshot:**
 
-<!-- Insert ICMP Echo Request and Reply screenshot here -->
+<!-- Insert ICMP Echo Request and Echo Reply screenshot here -->
 
 ---
 
-## Step 3: Analyze DNS Traffic
+## Step 4: Analyze DNS Traffic
 
-I used `nslookup` to generate DNS queries and analyze the name resolution process.
+I used `nslookup` to generate DNS queries against my Windows Server 2022 domain controller.
 
 ```cmd
-nslookup example.com 1.1.1.1
+nslookup mydomain.con <SERVER_PRIVATE_IP>
 ```
 
 Wireshark display filter:
@@ -90,7 +106,7 @@ Wireshark display filter:
 dns
 ```
 
-I identified DNS queries, responses, DNS server addresses, and the IP addresses returned during name resolution.
+I analyzed DNS queries and responses to understand how the Windows 10 client resolves domain names using the Windows Server DNS service.
 
 **Screenshot:**
 
@@ -98,142 +114,62 @@ I identified DNS queries, responses, DNS server addresses, and the IP addresses 
 
 ---
 
-## Step 4: Analyze the TCP Three-Way Handshake
+## Step 5: Analyze the TCP Three-Way Handshake
 
-I generated TCP traffic using PowerShell:
+I generated a TCP connection from Windows 10 to the Windows Server SMB service using PowerShell.
 
 ```powershell
-Test-NetConnection example.com -Port 80
+Test-NetConnection <SERVER_PRIVATE_IP> -Port 445
 ```
 
 Wireshark display filter:
 
 ```text
-tcp.port == 80
+tcp.port == 445
 ```
 
-I examined the three stages of the TCP connection process:
+I examined the three stages of TCP connection establishment:
 
-1. **SYN:** Client requests a connection.
-2. **SYN-ACK:** Server acknowledges the request.
-3. **ACK:** Client acknowledges the response and establishes the connection.
+1. **SYN:** Windows 10 initiates a connection to Windows Server.
+2. **SYN-ACK:** Windows Server acknowledges the connection request.
+3. **ACK:** Windows 10 acknowledges the server's response.
 
-I also used the following filter to identify initial TCP connection requests:
+This demonstrated how TCP establishes reliable connections between network devices.
+
+**Screenshot:**
+
+<!-- Insert TCP SYN, SYN-ACK, and ACK screenshot here -->
+
+---
+
+## Step 6: Analyze SMB File-Sharing Traffic
+
+I accessed an existing shared folder hosted on Windows Server 2022 from my Windows 10 client.
 
 ```text
-tcp.flags.syn == 1 && tcp.flags.ack == 0
+\\<SERVER_PRIVATE_IP>\IT
 ```
+
+Wireshark display filter:
+
+```text
+smb2
+```
+
+I examined SMB2/SMB3 protocol messages associated with network file access, including:
+
+- Negotiate Protocol
+- Session Setup
+- Tree Connect
+- Create
+- Read and Write operations
+
+This demonstrated how Windows clients communicate with file servers to access shared resources.
 
 **Screenshot:**
 
-<!-- Insert TCP three-way handshake screenshot here -->
+<!-- Insert SMB file-sharing packet capture screenshot here -->
 
 ---
 
-## Step 5: Compare TCP and UDP Traffic
-
-I analyzed the differences between TCP and UDP using Wireshark display filters.
-
-| Protocol | Display Filter | Description |
-|---|---|---|
-| TCP | `tcp` | Connection-oriented protocol with acknowledgments and retransmission mechanisms |
-| UDP | `udp` | Connectionless protocol with minimal overhead |
-| DNS | `dns` | Resolves domain names into IP addresses |
-| ICMP | `icmp` | Used for network diagnostics and error reporting |
-
-This helped me understand how different network protocols support communication between devices.
-
-**Screenshot:**
-
-<!-- Insert TCP and UDP comparison screenshot here -->
-
----
-
-## Step 6: Network Connectivity Troubleshooting
-
-I used Windows networking commands to investigate connectivity and name resolution.
-
-**View network configuration:**
-
-```cmd
-ipconfig /all
-```
-
-**Test network reachability:**
-
-```cmd
-ping 1.1.1.1
-```
-
-**Test DNS resolution:**
-
-```cmd
-nslookup example.com
-```
-
-**Trace network routes:**
-
-```cmd
-tracert example.com
-```
-
-These commands helped me identify IP configuration details, test connectivity, verify DNS resolution, and examine network paths.
-
-**Screenshot:**
-
-<!-- Insert network troubleshooting screenshot here -->
-
----
-
-## Step 7: Analyze Network Traffic Results
-
-I reviewed captured packets and compared them with the results of my Windows networking commands.
-
-| Test | What I Analyzed |
-|---|---|
-| ICMP | Echo Requests and Echo Replies |
-| DNS | Queries, responses, and resolved IP addresses |
-| TCP | SYN, SYN-ACK, and ACK packets |
-| UDP | Connectionless datagram communication |
-| Connectivity | IP addressing, DNS resolution, and network reachability |
-
-This demonstrated how packet captures can help identify and troubleshoot network communication issues.
-
-**Screenshot:**
-
-<!-- Insert packet analysis results screenshot here -->
-
----
-
-## Skills Demonstrated
-
-- TCP/IP Networking
-- Wireshark Packet Analysis
-- Network Troubleshooting
-- DNS Resolution
-- TCP Three-Way Handshake
-- TCP and UDP Protocol Analysis
-- ICMP Connectivity Testing
-- IP Addressing
-- Network Diagnostics
-- Windows Command Prompt
-- Windows PowerShell
-
----
-
-## What I Learned
-
-This lab strengthened my understanding of TCP/IP networking and how devices communicate across networks.
-
-I gained practical experience capturing and analyzing network packets, identifying common networking protocols, examining TCP connection establishment, and troubleshooting connectivity issues using Wireshark and Windows networking utilities.
-
-These skills are directly applicable to IT Support, Help Desk, Network Support, and System Administrator positions.
-
----
-
-## Author
-
-**David Saint Louis**  
-Information Technology / Cybersecurity
-
-[LinkedIn](https://www.linkedin.com/in/david-saint-louis-)
+## Step 7: Troubleshoot
