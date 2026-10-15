@@ -4,7 +4,7 @@
 
 This project demonstrates TCP/IP network traffic analysis and troubleshooting using Wireshark in a Windows client-server environment hosted in Microsoft Azure.
 
-The objective was to capture and analyze network communication between a Windows 10 Enterprise client and Windows Server 2022, examine DNS resolution, identify TCP three-way handshakes, analyze SMB file-sharing traffic, and troubleshoot network connectivity issues.
+The objective was to capture and analyze network communication between a Windows 10 Enterprise client and Windows Server 2022, examine DNS resolution, identify TCP three-way handshakes, and troubleshoot network connectivity issues.
 
 This lab simulates real-world network troubleshooting tasks performed by IT Support Specialists, Network Technicians, and System Administrators.
 
@@ -18,7 +18,6 @@ This lab simulates real-world network troubleshooting tasks performed by IT Supp
 - DNS
 - TCP/IP
 - ICMP
-- SMB File Sharing
 - Windows Command Prompt & PowerShell
 
 ---
@@ -52,9 +51,8 @@ ipconfig /all
 
 I verified the client and server IP addresses, DNS configuration, and network connectivity.
 
-**Screenshot:**
 
-<!-- Insert Windows Server and Windows 10 IP configuration screenshots here -->
+<img width="1470" height="956" alt="Screenshot 2026-10-15 at 6 39 24 PM" src="https://github.com/user-attachments/assets/ccf15d5a-75f9-40d8-aafa-ff08cb825757" />
 
 ---
 
@@ -64,10 +62,8 @@ I installed Wireshark on the Windows 10 Enterprise client and selected the activ
 
 I examined packet information, including source and destination IP addresses, protocols, and network communication between the client and server.
 
-**Screenshot:**
 
-<!-- Insert Wireshark packet capture screenshot here -->
-
+<img width="1470" height="956" alt="Screenshot 2026-10-15 at 6 41 27 PM" src="https://github.com/user-attachments/assets/26b39a86-18c1-4ecc-aaa5-668cfd8bb073" />
 ---
 
 ## Step 3: Analyze ICMP Traffic
@@ -86,9 +82,10 @@ icmp
 
 I examined ICMP Echo Request and Echo Reply packets to verify connectivity between both virtual machines.
 
-**Screenshot:**
+<img width="1470" height="956" alt="Screenshot 2026-10-15 at 6 44 00 PM" src="https://github.com/user-attachments/assets/dbc46a7e-9aa9-4cda-9803-bee684fc4326" />
 
-<!-- Insert ICMP Echo Request and Echo Reply screenshot here -->
+<img width="1470" height="956" alt="Screenshot 2026-10-15 at 6 44 09 PM" src="https://github.com/user-attachments/assets/bb8b698c-7dff-43bd-b771-1939a54b2f88" />
+
 
 ---
 
@@ -108,9 +105,10 @@ dns
 
 I analyzed DNS queries and responses to understand how the Windows 10 client resolves domain names using the Windows Server DNS service.
 
-**Screenshot:**
+<img width="1470" height="956" alt="Screenshot 2026-10-15 at 6 49 47 PM" src="https://github.com/user-attachments/assets/f47a4e45-7247-41ea-b41e-fd889f41ccbc" />
 
-<!-- Insert DNS query and response screenshot here -->
+<img width="1470" height="956" alt="Screenshot 2026-10-15 at 6 49 55 PM" src="https://github.com/user-attachments/assets/9665b328-a610-4d9f-b071-e857b985932b" />
+
 
 ---
 
@@ -136,40 +134,10 @@ I examined the three stages of TCP connection establishment:
 
 This demonstrated how TCP establishes reliable connections between network devices.
 
-**Screenshot:**
+<img width="1470" height="956" alt="Screenshot 2026-10-15 at 6 55 11 PM" src="https://github.com/user-attachments/assets/597f4751-4e92-4fe1-9d5c-4a44745fb216" />
 
-<!-- Insert TCP SYN, SYN-ACK, and ACK screenshot here -->
-
----
-
-## Step 6: Analyze SMB File-Sharing Traffic
-
-I accessed an existing shared folder hosted on Windows Server 2022 from my Windows 10 client.
-
-```text
-\\<SERVER_PRIVATE_IP>\IT
-```
-
-Wireshark display filter:
-
-```text
-smb2
-```
-
-I examined SMB2/SMB3 protocol messages associated with network file access, including:
-
-- Negotiate Protocol
-- Session Setup
-- Tree Connect
-- Create
-- Read and Write operations
-
-This demonstrated how Windows clients communicate with file servers to access shared resources.
-
-**Screenshot:**
-
-<!-- Insert SMB file-sharing packet capture screenshot here -->
+<img width="1470" height="956" alt="Screenshot 2026-10-15 at 6 55 23 PM" src="https://github.com/user-attachments/assets/2e261970-5f5b-42b1-ba01-4cfe151bc856" />
 
 ---
 
-## Step 7: Troubleshoot
+
